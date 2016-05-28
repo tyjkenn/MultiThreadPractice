@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -24,6 +25,7 @@ public class NumberListReader extends AsyncTask<String, String, String> {
     List<String> numberList;
     InputStream inputStream;
     Activity guiActivity;
+    int progress = 0;
 
     public NumberListReader(Activity guiActivity) {
         super();
@@ -46,6 +48,8 @@ public class NumberListReader extends AsyncTask<String, String, String> {
                     } catch (InterruptedException e) {
                         Log.e("Exception", "Can not sleep: " + e.toString());
                     }
+                    progress += 10;
+                    publishProgress();
                 }
                 inputStream.close();
             }
@@ -64,11 +68,14 @@ public class NumberListReader extends AsyncTask<String, String, String> {
                 new ArrayAdapter<String>(guiActivity, android.R.layout.simple_list_item_1, numberList);
         ListView listView = (ListView) guiActivity.findViewById(R.id.listView);
         listView.setAdapter(adapter);
+        ProgressBar bar = (ProgressBar) guiActivity.findViewById(R.id.progressBar);
+        bar.setProgress(0);
     }
 
     @Override
     protected void onProgressUpdate(String... values) {
-
+        ProgressBar bar = (ProgressBar) guiActivity.findViewById(R.id.progressBar);
+        bar.setProgress(progress);
     }
 
 }
