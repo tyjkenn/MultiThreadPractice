@@ -11,26 +11,25 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Reads from a file. Designed to run on a background thread.
+ * Intentionally slowed down to test the progress bar.
+ *
  * Created by tyjkenn on 5/28/16.
  */
 public class NumberListReader extends AsyncTask<String, String, String> {
 
-    List<String> numberList;
-    InputStream inputStream;
+    List<String> numberList = new ArrayList<>();
     Activity guiActivity;
     int progress = 0;
 
     public NumberListReader(Activity guiActivity) {
         super();
         this.guiActivity = guiActivity;
-        numberList = new ArrayList<String>();
     }
 
     @Override
@@ -65,7 +64,7 @@ public class NumberListReader extends AsyncTask<String, String, String> {
     @Override
     protected void onPostExecute(String result) {
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(guiActivity, android.R.layout.simple_list_item_1, numberList);
+                new ArrayAdapter<>(guiActivity, android.R.layout.simple_list_item_1, numberList);
         ListView listView = (ListView) guiActivity.findViewById(R.id.listView);
         listView.setAdapter(adapter);
         ProgressBar bar = (ProgressBar) guiActivity.findViewById(R.id.progressBar);
